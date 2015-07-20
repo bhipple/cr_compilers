@@ -79,7 +79,7 @@ When resolving ambiguities,
 - Good algorithms are known, which require only a single pass and very few operations at each char
 
 #### Lexing Process
-    Lexical Specification -> Regular expressions -> NFA -> DFA -> Table-driven implementation of DFA
+Lexical Specification -> Regular expressions -> NFA -> DFA -> Table-driven implementation of DFA
 
 ### Week 2
 #### Finite Automata
@@ -100,17 +100,17 @@ Use a matrix where every row is a state and every column is an input of the alph
 
 Basic idea with a state transition matrix:
 ```
-    i = 0;
-    state = 0;
-    while(input[i]) {
-        state = A[state, input[i++]];
-    }
+i = 0;
+state = 0;
+while(input[i]) {
+    state = A[state, input[i++]];
+}
 ```
 
 As a memory optimization, we often implement it in the adjacency list approach, with each state sharing the vector of states to go to if they are identical.
 
 ### Week 3
-Parse Trees and Derivations:
+#### Parse Trees and Derivations
 - Has Terminals at the leaves
 - Has non-terminals at the interior nodes
 - An in-order traversal of the leaves of the parse-tree gives the original input string
@@ -121,3 +121,126 @@ Left-most derivation: At each step building the parse tree, replace the left-mos
 Equivalent notion of a right-most derivation
 
 Note that for every parse tree, a right-most derivation and a left-most derivation generate equivalent parse trees.
+
+#### Resolving Ambiguities
+A grammar is ambiguous if it has more than one parse tree for some string (e.g., there is more than one right-most or left-most derivation for some string).
+
+Ambiguous languages are ill-defined. The most direct solution to this is to rewrite the CFG to generate the same language in an unambiguous way
+
+```
+E -> E' + E | E'
+E' -> id * E' | id | (E) * E' | (E)
+```
+The above unambiguously parses `id * id + id`, with * having precedence over +.
+
+Another such example are if-then-else expressions where the else is optional:
+```
+E -> if E then E
+   | if E then E else E
+   | OTHER
+```
+Generally, we want every `else` to match the closest unmatched `then`.
+```
+E -> MatchedIf
+   | UnmatchedIf
+
+MatchedIf -> if E then MatchedIf else MatchedIf
+           | OTHER
+
+UnmatchedIf -> if E then E
+             | if E then MatchedIf else UnmatchedIf
+```
+This will do the correct thing on a statement like `if then if then else`
+
+We could rewrite grammars to be unambiguous, but in practice it's often much harder to understand. An alternative approach is to write the grammar unambiguously, and then use a tool that allows specifiying associativity or precedence to disambiguate.
+
+#### Error Handling
+Should:
+- Report errors accurately and clearly
+- Recover from an error quickly
+- Not slow down compilation of valid code
+
+Three kinds of error handling:
+- Panic Mode
+    Simplest and most common method used today
+    When an error is detected, the parser discards tokens until one with a clear role is found, then continues from there.
+    Looks for "syunchronizing tokens", typically the statement or expression terminators
+    Bison has a terminal symbol "error" to describe how much input to skip:
+
+    `E --> int | E + E | (E) | error int | (error)`
+
+    First try the three normal productions. If none work, throw away input until we get to the next integer or a bracketed error
+- Error Productions
+    Add a rule `E --> EE`
+    Specify known common mistakes in the grammar that programmers make.
+    This is the mechanism by which compiler warners are generated, where the compiler warns the programmer about some piece of code but accepts it anyway.
+
+- Automatic local or global correction
+    Trying to find a correct "nearby" program, by doing token insertions and deletions (edit distance).
+    This is hard to implement, nearby is not necessarily the 'correct' program, and most importantly this will slow down the parsing of correct programs.
+    The most famous example is the PL/C compiler, which is able to compile almost anything
+    Complex error recovery was more important a few decades ago, when users could only compile once per day. In this scenario, they wanted the compiler to catch as many errors as possible in each iteration.
+
+#### Abstract Syntax Trees
+Like a parse tree, but with some details abstracted away (parse trees are too verbose)
+
+Remove redundant nodes like single-successor nodes, parenthesis (tree structure shows order already)
+
+#### Parsing Algorithms
+##### Recursive Descent
+Top-down parsing algorithm that constructs the parse tree from the top and from left to right.
+
+Consider the grammer
+```
+E -> T | T + E
+T -> int | int * T | (E)
+```
+We start with the top-level non-terminal E, and try the production rules for E in order.  When a production fails, we have to do some backtracking.
+
+We keep applying rules until we get to a terminal, at which point we check to see if we can consume legitimately from the input stream. If the input stream matches, great; if not, we have to backtrack up a node and try the next production rule.
+
+```
+bool term(TOKEN tok) { return *next++ == tok; }`
+bool Sn() { ... }
+bool S() { ... }
+```
+Functions that determine if we can produce a given terminal, if we can match the nth production of S, or if we can match any production of S, respectively.
+
+Here's a complete example of a CFG plus a recursive descent parser implementation:
+```
+E -> T | T + E
+T -> int | int * T | (E)
+
+bool term(TOKEN tok) { return *next++ == tok; }
+
+bool E1() { return T(); }
+bool E2() { return T() && term(PLUS) && E(); }
+
+bool E() { TOKEN *save = next; return (next = save, E1())
+                                   || (next = save, E2()); }
+
+bool T1() { return term(INT); }
+bool T2() { return term(INT) && term(TIMES) && T(); }
+bool T3() { return term(OPEN) && E() && term(CLOSE); }
+
+bool T() { TOKEN *save = next; return (next = save, T1())
+                                   || (next = save, T2())
+                                   || (next = save, T3()); }
+```
+Limitations: If a production for non-terminal X succeeds, there's no way to backtrack and try a different production for X later. There are recursive descent algorithms that support "full" backtracking, with substantially more complicated implementations. We can get around this problem when we have a grammar where for any non-terminal at most one production can succeed through `left-factoring`.
+
+##### Left Recursion
+A left-resursive grammar has a non-terminal S, as in `S -> Sa`, where you have a production that has the same symbol in the leftmost position.  This causes the above algorithm to get stuck in an infinite loop.
+
+Consider the left-resursive grammar `S-> Sa | b`.  S generates all strings starting with a `b` and followed by any number of `a`.  This recursion wants to create the leftmost symbol last.
+
+Can rewrite using right-recursion: `S -> bS'`, `S' -> aS' | e`, which works with our left-recursive descent algorithm.
+
+Watch out for delayed left-recursion:
+```
+S -> Xa | b
+A -> Sc | d
+```
+The Dragon Book has some algorithms for eliminating the non-obvious left recursive problem above.  This means that, in principle, there are automated ways to remove left-recursion. In practice, people do it by hand so that they can still work with their grammar.
+
+Recursive descent is often used in production compilers, including gcc.
