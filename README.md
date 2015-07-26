@@ -3,6 +3,15 @@ https://class.stanford.edu/courses/Engineering/Compilers/Fall2014/courseware
 
 https://www.coursera.org/course/compilers
 
+###Notes on tools
+Run the compiler with:
+
+`/usr/class/cs143/bin/coolc [-o fileout] file1.cl file2.cl ... filen.cl`
+
+Run the compiled program with:
+
+`/usr/class/cs143/bin/spim -file file.s
+
 ###Week 1
 ####Phases of Compilation:
 - Lexical Analysis
