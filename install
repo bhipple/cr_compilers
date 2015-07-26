@@ -9,12 +9,14 @@ sudo apt-get install \
                      libxaw7-dev \
 
 # File dependencies
-sudo mkdir /usr/class
-sudo chown $USER /usr/class
-cd /usr/class
-wget http://spark-university.s3.amazonaws.com/stanford-compilers/vm/student-dist.tar.gz
-tar -xf student-dist.tar.gz
-ln -s /usr/class/cs143/cool ~/cr_compilers/cool
+#wget http://spark-university.s3.amazonaws.com/stanford-compilers/vm/student-dist.tar.gz
+#tar -xf student-dist.tar.gz
+#ln -s /usr/class/cs143/cool ~/cr_compilers/cool
 
+# Setup the class directory for provided code
+if ! [ -d "class" ]; then
+    mkdir -p class && cd !$
+    tar -xf ../student-dist.tar.gz
+fi
 
 echo "If not done already, add /usr/class/cs143/cool/bin to your path"
