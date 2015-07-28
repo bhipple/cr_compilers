@@ -1,0 +1,21 @@
+1,13c1,6
+< STR_CONST "\\"
+< STR_CONST "\"\""
+< LONGERROR
+< LONGERROR
+< STR_CONST ""
+< LONGERROR
+< STR_CONST "\\"
+< LONGERROR
+< STR_CONST "\\"
+< STR_CONST ""
+< LONGERROR
+< STR_CONST "\""
+< LONGERROR
+---
+> STR_CONST "\\\\\"\""
+> \#3 STR_CONST "\\\"\""
+> \\#3 STR_CONST ""
+> \#3 STR_CONST "\\\\\"\"\\\"\"\\\\\"\""
+> STR_CONST "\\\"\"\\\"\""
+> \#3 ERROR "Newline in string requires \\"

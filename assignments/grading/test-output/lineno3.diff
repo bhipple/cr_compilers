@@ -1,0 +1,7 @@
+1,4c1
+< #7 '+'
+< #8 OBJECTID abc
+< #12 TYPEID DEF
+< #13 STR_CONST "string"
+---
+> +abcDEF#13 STR_CONST "string"

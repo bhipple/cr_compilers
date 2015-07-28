@@ -1,0 +1,3 @@
+STR_CONST "string (* 123 *) string"
+STR_CONST "string \\\n(* 123 *)"
+STR_CONST "string (* \\\n123 *)"

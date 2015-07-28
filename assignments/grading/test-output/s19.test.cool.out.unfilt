@@ -1,0 +1,3 @@
+#name "./s19.test.cool"
+#2 ERROR "Newline in string requires \\"
+#2 STR_CONST "cd"

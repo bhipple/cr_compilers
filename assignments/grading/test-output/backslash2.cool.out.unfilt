@@ -1,0 +1,12 @@
+#name "./backslash2.cool"
+#1 ERROR "Newline in string requires \\"
+#1 STR_CONST "I'm not going to escape this newline"
+#3 STR_CONST "This is also not escaped \\\\\n"
+#5 STR_CONST "This is, though \\\\\\\n"
+#7 ERROR "Newline in string requires \\"
+#7 ERROR "Newline in string requires \\"
+#7 STR_CONST "\\\\\""
+It's#7 FI
+netohavethis:\n#7 IN
+astr#7 IN
+g#7 ERROR "Newline in string requires \\"

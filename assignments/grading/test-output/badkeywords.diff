@@ -1,0 +1,48 @@
+1,23c1,22
+< OBJECTID casee
+< OBJECTID elsif
+< OBJECTID form
+< OBJECTID es
+< ';'
+< OBJECTID ac
+< OBJECTID true9
+< TYPEID False
+< OBJECTID fi_if
+< OBJECTID inh
+< OBJECTID erits
+< OBJECTID isS
+< OBJECTID isv
+< TYPEID Oid
+< TYPEID Loopnew
+< TYPEID NOte
+< OBJECTID ofofofofof
+< TYPEID PO8ol
+< THEN
+< OBJECTID hile
+< OBJECTID ifif
+< TYPEID IFIF
+< OBJECTID fif
+---
+> CASE
+> eels#2 IF
+> formes;ac#5 BOOL_CONST true
+> INT_CONST 9
+> False#7 FI
+> _#7 IF
+> IN
+> heritsisSisvOid#11 LOOP
+> NEW
+> NOte#13 OF
+> OF
+> OF
+> OF
+> OF
+> PO#14 INT_CONST 8
+> ol#15 THEN
+> hile#17 IF
+> IF
+> IF
+> IF
+> FI
+> f
+\ No newline at end of file

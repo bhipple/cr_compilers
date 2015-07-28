@@ -1,0 +1,333 @@
+2c2
+< TYPEID Main
+---
+> Ma#1 IN
+4,73c4,38
+< TYPEID IO
+< '{'
+< OBJECTID main
+< '('
+< ')'
+< ':'
+< TYPEID SELF_TYPE
+< '{'
+< '('
+< LET
+< OBJECTID c
+< ':'
+< TYPEID Complex
+< ASSIGN
+< '('
+< NEW
+< TYPEID Complex
+< ')'
+< '.'
+< OBJECTID init
+< '('
+< INT_CONST 1
+< ','
+< INT_CONST 1
+< ')'
+< IN
+< '{'
+< IF
+< OBJECTID c
+< '.'
+< OBJECTID reflect_X
+< '('
+< ')'
+< '='
+< OBJECTID c
+< '.'
+< OBJECTID reflect_0
+< '('
+< ')'
+< THEN
+< OBJECTID out_string
+< '('
+< STR_CONST "=)\n"
+< ')'
+< ELSE
+< OBJECTID out_string
+< '('
+< STR_CONST "=(\n"
+< ')'
+< FI
+< ';'
+< IF
+< OBJECTID c
+< '.'
+< OBJECTID reflect_X
+< '('
+< ')'
+< '.'
+< OBJECTID reflect_Y
+< '('
+< ')'
+< '.'
+< OBJECTID equal
+< '('
+< OBJECTID c
+< '.'
+< OBJECTID reflect_0
+< '('
+< ')'
+< ')'
+---
+> IO{ma#2 IN
+> ():{(#3 LET
+> c:Complex<-(#3 NEW
+> Complex).#3 IN
+> it(#3 INT_CONST 1
+> ,#3 INT_CONST 1
+> )#3 IN
+> {#6 IF
+> c.reflect_X()=c.reflect_#6 INT_CONST 0
+> ()#7 THEN
+> out_str#7 IN
+> g(#7 STR_CONST "=)\\n"
+> )#8 ELSE
+> out_str#8 IN
+> g(#8 STR_CONST "=(\\n"
+> )#9 FI
+> ;#11 IF
+> c.reflect_X().reflect_Y().equal(c.reflect_#11 INT_CONST 0
+> ())#12 THEN
+> out_str#12 IN
+> g(#12 STR_CONST "=)\\n"
+> )#13 ELSE
+> out_str#13 IN
+> g(#13 STR_CONST "=(\\n"
+> )#14 FI
+> ;})};};#20 CLASS
+> Complex#20 INHERITS
+> IO{x:#21 IN
+> t;y:#22 IN
+> t;#24 IN
+> it(a:#24 IN
+> t,b:#24 IN
+> t):Complex{{x=a;y=b;self;}};pr#32 IN
+> t():Object{#33 IF
+> y=#33 INT_CONST 0
+75,137c40,51
+< OBJECTID out_string
+< '('
+< STR_CONST "=)\n"
+< ')'
+< ELSE
+< OBJECTID out_string
+< '('
+< STR_CONST "=(\n"
+< ')'
+< FI
+< ';'
+< '}'
+< ')'
+< '}'
+< ';'
+< '}'
+< ';'
+< CLASS
+< TYPEID Complex
+< INHERITS
+< TYPEID IO
+< '{'
+< OBJECTID x
+< ':'
+< TYPEID Int
+< ';'
+< OBJECTID y
+< ':'
+< TYPEID Int
+< ';'
+< OBJECTID init
+< '('
+< OBJECTID a
+< ':'
+< TYPEID Int
+< ','
+< OBJECTID b
+< ':'
+< TYPEID Int
+< ')'
+< ':'
+< TYPEID Complex
+< '{'
+< '{'
+< OBJECTID x
+< '='
+< OBJECTID a
+< ';'
+< OBJECTID y
+< '='
+< OBJECTID b
+< ';'
+< OBJECTID self
+< ';'
+< '}'
+< '}'
+< ';'
+< OBJECTID print
+< '('
+< ')'
+< ':'
+< TYPEID Object
+< '{'
+---
+> out_#34 IN
+> t(x)#35 ELSE
+> out_#35 IN
+> t(x).out_str#35 IN
+> g(#35 STR_CONST "+"
+> ).out_#35 IN
+> t(y).out_str#35 IN
+> g(#35 STR_CONST "I"
+> )#36 FI
+> };reflect_#39 INT_CONST 0
+> ():Complex{{x=~x;y=~y;self;}};reflect_X():Complex{{y=~y;self;}};reflect_Y():Complex{{x=~x;self;}};equal(d:Complex):Bool{#62 IF
+> x=d.x_value()#63 THEN
+139,252c53
+< OBJECTID y
+< '='
+< INT_CONST 0
+< THEN
+< OBJECTID out_int
+< '('
+< OBJECTID x
+< ')'
+< ELSE
+< OBJECTID out_int
+< '('
+< OBJECTID x
+< ')'
+< '.'
+< OBJECTID out_string
+< '('
+< STR_CONST "+"
+< ')'
+< '.'
+< OBJECTID out_int
+< '('
+< OBJECTID y
+< ')'
+< '.'
+< OBJECTID out_string
+< '('
+< STR_CONST "I"
+< ')'
+< FI
+< '}'
+< ';'
+< OBJECTID reflect_0
+< '('
+< ')'
+< ':'
+< TYPEID Complex
+< '{'
+< '{'
+< OBJECTID x
+< '='
+< '~'
+< OBJECTID x
+< ';'
+< OBJECTID y
+< '='
+< '~'
+< OBJECTID y
+< ';'
+< OBJECTID self
+< ';'
+< '}'
+< '}'
+< ';'
+< OBJECTID reflect_X
+< '('
+< ')'
+< ':'
+< TYPEID Complex
+< '{'
+< '{'
+< OBJECTID y
+< '='
+< '~'
+< OBJECTID y
+< ';'
+< OBJECTID self
+< ';'
+< '}'
+< '}'
+< ';'
+< OBJECTID reflect_Y
+< '('
+< ')'
+< ':'
+< TYPEID Complex
+< '{'
+< '{'
+< OBJECTID x
+< '='
+< '~'
+< OBJECTID x
+< ';'
+< OBJECTID self
+< ';'
+< '}'
+< '}'
+< ';'
+< OBJECTID equal
+< '('
+< OBJECTID d
+< ':'
+< TYPEID Complex
+< ')'
+< ':'
+< TYPEID Bool
+< '{'
+< IF
+< OBJECTID x
+< '='
+< OBJECTID d
+< '.'
+< OBJECTID x_value
+< '('
+< ')'
+< THEN
+< IF
+< OBJECTID y
+< '='
+< OBJECTID d
+< '.'
+< OBJECTID y_value
+< '('
+< ')'
+< THEN
+---
+> y=d.y_value()#65 THEN
+260,281c61,63
+< '}'
+< ';'
+< OBJECTID x_value
+< '('
+< ')'
+< ':'
+< TYPEID Int
+< '{'
+< OBJECTID x
+< '}'
+< ';'
+< OBJECTID y_value
+< '('
+< ')'
+< ':'
+< TYPEID Int
+< '{'
+< OBJECTID y
+< '}'
+< ';'
+< '}'
+< ';'
+---
+> };x_value():#72 IN
+> t{x};y_value():#76 IN
+> t{y};};
+\ No newline at end of file

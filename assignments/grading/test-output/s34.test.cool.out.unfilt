@@ -1,0 +1,2 @@
+#name "./s34.test.cool"
+before_it#3 ERROR "Newline in string requires \\"

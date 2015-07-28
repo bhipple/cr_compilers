@@ -1,0 +1,16 @@
+1,11c1,2
+< NOT
+< IN
+< OBJECTID a
+< OBJECTID comment
+< '('
+< '*'
+< NOT
+< OBJECTID a
+< OBJECTID comment
+< '*'
+< ')'
+---
+> not#3 IN
+> acomment(*notacomment*)
+\ No newline at end of file

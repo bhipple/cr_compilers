@@ -1,0 +1,43 @@
+CLASS
+Ma#1 IN
+INHERITS
+IO{pal(s:Str#2 IN
+g):Bool{#3 IF
+s.length()=#3 INT_CONST 0
+THEN
+BOOL_CONST true
+ELSE
+IF
+s.length()=#5 INT_CONST 1
+THEN
+BOOL_CONST true
+ELSE
+IF
+s.substr(#7 INT_CONST 0
+,#7 INT_CONST 1
+)=s.substr(s.length()-#7 INT_CONST 1
+,#7 INT_CONST 1
+)#8 THEN
+pal(s.substr(#8 INT_CONST 1
+,s.length()-#8 INT_CONST 2
+))#9 ELSE
+BOOL_CONST false
+FI
+FI
+FI
+};i:#13 IN
+t;ma#15 IN
+():{{i<-~#17 INT_CONST 1
+;out_str#18 IN
+g(#18 STR_CONST "enter a string\\n"
+);#19 IF
+pal(#19 IN
+_str#19 IN
+g())#20 THEN
+out_str#20 IN
+g(#20 STR_CONST "that was a palindrome\\n"
+)#21 ELSE
+out_str#21 IN
+g(#21 STR_CONST "that was not a palindrome\\n"
+)#22 FI
+;}};};

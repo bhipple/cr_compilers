@@ -1,0 +1,10 @@
+guard :shell do
+    watch(%r{(cool\.flex)}) do
+        `make lexer`
+    end
+
+    watch(%r{(lexer|\.cl)$}) do
+        `./lexer test.cl`
+        `./lexer small-test.cl`
+    end
+end

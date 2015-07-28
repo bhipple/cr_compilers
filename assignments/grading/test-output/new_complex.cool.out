@@ -1,0 +1,63 @@
+CLASS
+Ma#1 IN
+INHERITS
+IO{ma#2 IN
+():{(#3 LET
+c:Complex<-(#3 NEW
+Complex).#3 IN
+it(#3 INT_CONST 1
+,#3 INT_CONST 1
+)#3 IN
+{#6 IF
+c.reflect_X()=c.reflect_#6 INT_CONST 0
+()#7 THEN
+out_str#7 IN
+g(#7 STR_CONST "=)\\n"
+)#8 ELSE
+out_str#8 IN
+g(#8 STR_CONST "=(\\n"
+)#9 FI
+;#11 IF
+c.reflect_X().reflect_Y().equal(c.reflect_#11 INT_CONST 0
+())#12 THEN
+out_str#12 IN
+g(#12 STR_CONST "=)\\n"
+)#13 ELSE
+out_str#13 IN
+g(#13 STR_CONST "=(\\n"
+)#14 FI
+;})};};#20 CLASS
+Complex#20 INHERITS
+IO{x:#21 IN
+t;y:#22 IN
+t;#24 IN
+it(a:#24 IN
+t,b:#24 IN
+t):Complex{{x=a;y=b;self;}};pr#32 IN
+t():Object{#33 IF
+y=#33 INT_CONST 0
+THEN
+out_#34 IN
+t(x)#35 ELSE
+out_#35 IN
+t(x).out_str#35 IN
+g(#35 STR_CONST "+"
+).out_#35 IN
+t(y).out_str#35 IN
+g(#35 STR_CONST "I"
+)#36 FI
+};reflect_#39 INT_CONST 0
+():Complex{{x=~x;y=~y;self;}};reflect_X():Complex{{y=~y;self;}};reflect_Y():Complex{{x=~x;self;}};equal(d:Complex):Bool{#62 IF
+x=d.x_value()#63 THEN
+IF
+y=d.y_value()#65 THEN
+BOOL_CONST true
+ELSE
+BOOL_CONST false
+FI
+ELSE
+BOOL_CONST false
+FI
+};x_value():#72 IN
+t{x};y_value():#76 IN
+t{y};};

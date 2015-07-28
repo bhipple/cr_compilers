@@ -1,0 +1,12 @@
+25,32c25
+< TYPEID True
+< TYPEID TRue
+< TYPEID TrUe
+< TYPEID TruE
+< TYPEID TRUe
+< TYPEID TRuE
+< TYPEID TrUE
+< TYPEID TRUE
+---
+> TrueTRueTrUeTruETRUeTRuETrUETRUE
+\ No newline at end of file

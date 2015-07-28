@@ -1,0 +1,513 @@
+1,16c1,7
+< CLASS
+< TYPEID A2I
+< '{'
+< OBJECTID c2i
+< '('
+< OBJECTID char
+< ':'
+< TYPEID String
+< ')'
+< ':'
+< TYPEID Int
+< '{'
+< IF
+< OBJECTID char
+< '='
+< STR_CONST "0"
+---
+> ))#13 CLASS
+> A#13 INT_CONST 2
+> I{c#15 INT_CONST 2
+> i(char:Str#15 IN
+> g):#15 IN
+> t{#16 IF
+> char=#16 STR_CONST "0"
+21,23c12
+< OBJECTID char
+< '='
+< STR_CONST "1"
+---
+> char=#17 STR_CONST "1"
+28,30c17
+< OBJECTID char
+< '='
+< STR_CONST "2"
+---
+> char=#18 STR_CONST "2"
+35,37c22
+< OBJECTID char
+< '='
+< STR_CONST "3"
+---
+> char=#19 STR_CONST "3"
+42,44c27
+< OBJECTID char
+< '='
+< STR_CONST "4"
+---
+> char=#20 STR_CONST "4"
+49,51c32
+< OBJECTID char
+< '='
+< STR_CONST "5"
+---
+> char=#21 STR_CONST "5"
+56,58c37
+< OBJECTID char
+< '='
+< STR_CONST "6"
+---
+> char=#22 STR_CONST "6"
+63,65c42
+< OBJECTID char
+< '='
+< STR_CONST "7"
+---
+> char=#23 STR_CONST "7"
+70,72c47
+< OBJECTID char
+< '='
+< STR_CONST "8"
+---
+> char=#24 STR_CONST "8"
+77,79c52
+< OBJECTID char
+< '='
+< STR_CONST "9"
+---
+> char=#25 STR_CONST "9"
+83,91c56,57
+< '{'
+< OBJECTID abort
+< '('
+< ')'
+< ';'
+< INT_CONST 0
+< ';'
+< '}'
+< FI
+---
+> {abort();#26 INT_CONST 0
+> ;}#27 FI
+101,115c67,71
+< '}'
+< ';'
+< OBJECTID i2c
+< '('
+< OBJECTID i
+< ':'
+< TYPEID Int
+< ')'
+< ':'
+< TYPEID String
+< '{'
+< IF
+< OBJECTID i
+< '='
+< INT_CONST 0
+---
+> };i#33 INT_CONST 2
+> c(i:#33 IN
+> t):Str#33 IN
+> g{#34 IF
+> i=#34 INT_CONST 0
+120,122c76
+< OBJECTID i
+< '='
+< INT_CONST 1
+---
+> i=#35 INT_CONST 1
+127,129c81
+< OBJECTID i
+< '='
+< INT_CONST 2
+---
+> i=#36 INT_CONST 2
+134,136c86
+< OBJECTID i
+< '='
+< INT_CONST 3
+---
+> i=#37 INT_CONST 3
+141,143c91
+< OBJECTID i
+< '='
+< INT_CONST 4
+---
+> i=#38 INT_CONST 4
+148,150c96
+< OBJECTID i
+< '='
+< INT_CONST 5
+---
+> i=#39 INT_CONST 5
+155,157c101
+< OBJECTID i
+< '='
+< INT_CONST 6
+---
+> i=#40 INT_CONST 6
+162,164c106
+< OBJECTID i
+< '='
+< INT_CONST 7
+---
+> i=#41 INT_CONST 7
+169,171c111
+< OBJECTID i
+< '='
+< INT_CONST 8
+---
+> i=#42 INT_CONST 8
+176,178c116
+< OBJECTID i
+< '='
+< INT_CONST 9
+---
+> i=#43 INT_CONST 9
+182,190c120,121
+< '{'
+< OBJECTID abort
+< '('
+< ')'
+< ';'
+< STR_CONST ""
+< ';'
+< '}'
+< FI
+---
+> {abort();#44 STR_CONST ""
+> ;}#45 FI
+200,218c131,135
+< '}'
+< ';'
+< OBJECTID a2i
+< '('
+< OBJECTID s
+< ':'
+< TYPEID String
+< ')'
+< ':'
+< TYPEID Int
+< '{'
+< IF
+< OBJECTID s
+< '.'
+< OBJECTID length
+< '('
+< ')'
+< '='
+< INT_CONST 0
+---
+> };a#56 INT_CONST 2
+> i(s:Str#56 IN
+> g):#56 IN
+> t{#57 IF
+> s.length()=#57 INT_CONST 0
+223,232c140,142
+< OBJECTID s
+< '.'
+< OBJECTID substr
+< '('
+< INT_CONST 0
+< ','
+< INT_CONST 1
+< ')'
+< '='
+< STR_CONST "-"
+---
+> s.substr(#58 INT_CONST 0
+> ,#58 INT_CONST 1
+> )=#58 STR_CONST "-"
+234,252c144,147
+< '~'
+< OBJECTID a2i_aux
+< '('
+< OBJECTID s
+< '.'
+< OBJECTID substr
+< '('
+< INT_CONST 1
+< ','
+< OBJECTID s
+< '.'
+< OBJECTID length
+< '('
+< ')'
+< '-'
+< INT_CONST 1
+< ')'
+< ')'
+< ELSE
+---
+> ~a#58 INT_CONST 2
+> i_aux(s.substr(#58 INT_CONST 1
+> ,s.length()-#58 INT_CONST 1
+> ))#58 ELSE
+254,287c149,158
+< OBJECTID s
+< '.'
+< OBJECTID substr
+< '('
+< INT_CONST 0
+< ','
+< INT_CONST 1
+< ')'
+< '='
+< STR_CONST "+"
+< THEN
+< OBJECTID a2i_aux
+< '('
+< OBJECTID s
+< '.'
+< OBJECTID substr
+< '('
+< INT_CONST 1
+< ','
+< OBJECTID s
+< '.'
+< OBJECTID length
+< '('
+< ')'
+< '-'
+< INT_CONST 1
+< ')'
+< ')'
+< ELSE
+< OBJECTID a2i_aux
+< '('
+< OBJECTID s
+< ')'
+< FI
+---
+> s.substr(#59 INT_CONST 0
+> ,#59 INT_CONST 1
+> )=#59 STR_CONST "+"
+> THEN
+> a#59 INT_CONST 2
+> i_aux(s.substr(#59 INT_CONST 1
+> ,s.length()-#59 INT_CONST 1
+> ))#59 ELSE
+> a#60 INT_CONST 2
+> i_aux(s)#61 FI
+290,307c161,164
+< '}'
+< ';'
+< OBJECTID a2i_aux
+< '('
+< OBJECTID s
+< ':'
+< TYPEID String
+< ')'
+< ':'
+< TYPEID Int
+< '{'
+< '('
+< LET
+< OBJECTID int
+< ':'
+< TYPEID Int
+< ASSIGN
+< INT_CONST 0
+---
+> };a#68 INT_CONST 2
+> i_aux(s:Str#68 IN
+> g):#68 IN
+> t{(#69 LET
+309,320c166,167
+< '{'
+< '('
+< LET
+< OBJECTID j
+< ':'
+< TYPEID Int
+< ASSIGN
+< OBJECTID s
+< '.'
+< OBJECTID length
+< '('
+< ')'
+---
+> t:#69 IN
+> t<-#69 INT_CONST 0
+322,328c169,174
+< '('
+< LET
+< OBJECTID i
+< ':'
+< TYPEID Int
+< ASSIGN
+< INT_CONST 0
+---
+> {(#71 LET
+> j:#71 IN
+> t<-s.length()#71 IN
+> (#72 LET
+> i:#72 IN
+> t<-#72 INT_CONST 0
+331,383c177,190
+< OBJECTID i
+< '<'
+< OBJECTID j
+< LOOP
+< '{'
+< OBJECTID int
+< ASSIGN
+< OBJECTID int
+< '*'
+< INT_CONST 10
+< '+'
+< OBJECTID c2i
+< '('
+< OBJECTID s
+< '.'
+< OBJECTID substr
+< '('
+< OBJECTID i
+< ','
+< INT_CONST 1
+< ')'
+< ')'
+< ';'
+< OBJECTID i
+< ASSIGN
+< OBJECTID i
+< '+'
+< INT_CONST 1
+< ';'
+< '}'
+< POOL
+< ')'
+< ')'
+< ';'
+< OBJECTID int
+< ';'
+< '}'
+< ')'
+< '}'
+< ';'
+< OBJECTID i2a
+< '('
+< OBJECTID i
+< ':'
+< TYPEID Int
+< ')'
+< ':'
+< TYPEID String
+< '{'
+< IF
+< OBJECTID i
+< '='
+< INT_CONST 0
+---
+> i<j#73 LOOP
+> {#75 IN
+> t<-#75 IN
+> t*#75 INT_CONST 10
+> +c#75 INT_CONST 2
+> i(s.substr(i,#75 INT_CONST 1
+> ));i<-i+#76 INT_CONST 1
+> ;}#78 POOL
+> ));#81 IN
+> t;})};i#90 INT_CONST 2
+> a(i:#90 IN
+> t):Str#90 IN
+> g{#91 IF
+> i=#91 INT_CONST 0
+389,396c196,198
+< '<'
+< OBJECTID i
+< THEN
+< OBJECTID i2a_aux
+< '('
+< OBJECTID i
+< ')'
+< ELSE
+---
+> <i#92 THEN
+> i#92 INT_CONST 2
+> a_aux(i)#92 ELSE
+398,425c200,208
+< '.'
+< OBJECTID concat
+< '('
+< OBJECTID i2a_aux
+< '('
+< OBJECTID i
+< '*'
+< '~'
+< INT_CONST 1
+< ')'
+< ')'
+< FI
+< FI
+< '}'
+< ';'
+< OBJECTID i2a_aux
+< '('
+< OBJECTID i
+< ':'
+< TYPEID Int
+< ')'
+< ':'
+< TYPEID String
+< '{'
+< IF
+< OBJECTID i
+< '='
+< INT_CONST 0
+---
+> .concat(i#93 INT_CONST 2
+> a_aux(i*~#93 INT_CONST 1
+> ))#94 FI
+> FI
+> };i#100 INT_CONST 2
+> a_aux(i:#100 IN
+> t):Str#100 IN
+> g{#101 IF
+> i=#101 INT_CONST 0
+429,437c212,214
+< '('
+< LET
+< OBJECTID next
+< ':'
+< TYPEID Int
+< ASSIGN
+< OBJECTID i
+< '/'
+< INT_CONST 10
+---
+> (#102 LET
+> next:#102 IN
+> t<-i/#102 INT_CONST 10
+439,460c216,220
+< OBJECTID i2a_aux
+< '('
+< OBJECTID next
+< ')'
+< '.'
+< OBJECTID concat
+< '('
+< OBJECTID i2c
+< '('
+< OBJECTID i
+< '-'
+< OBJECTID next
+< '*'
+< INT_CONST 10
+< ')'
+< ')'
+< ')'
+< FI
+< '}'
+< ';'
+< '}'
+< ';'
+---
+> i#103 INT_CONST 2
+> a_aux(next).concat(i#103 INT_CONST 2
+> c(i-next*#103 INT_CONST 10
+> )))#105 FI
+> };};
+\ No newline at end of file
