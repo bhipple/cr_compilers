@@ -32,7 +32,7 @@ extern FILE *fin; /* we read from this file */
         YY_FATAL_ERROR( "read() in flex scanner failed");
 
 char string_buf[MAX_STR_CONST]; /* to assemble string constants */
-char *string_buf_ptr;
+char *string_buf_ptr = &string_buf[0];
 
 extern int curr_lineno;
 extern int verbose_flag;
@@ -66,6 +66,7 @@ ESCAPED_STR_CHARS   \\[btnf]
 WHITESPACE      [ \t\f\r\v]+
 
 %x STRING
+%x BADSTRING
 %x COMMENT
 %x BR_COMMENT
 
@@ -92,7 +93,6 @@ WHITESPACE      [ \t\f\r\v]+
   */
 {DARROW}                { return DARROW; }
 (?i:ISVOID)             { return ISVOID; }
- /*\.                      { return "."; }*/
 (?i:NOT)                { return NOT; }
 
  /*
@@ -128,17 +128,35 @@ f[Aa][Ll][Ss][Ee]       { cool_yylval.boolean = false;
   *  \n \t \b \f, the result is c.
   *
   */
-\"                      { BEGIN(STRING); memset(&string_buf[0], 0, sizeof(string_buf)); }
-<STRING>\"              {
-                              //string_buf[strlen(string_buf)-1] = '\0';
-                              cool_yylval.symbol = strTable.add_string(string_buf);
-                              BEGIN(INITIAL);
-                              return STR_CONST;
+\"                      {
+                            BEGIN(STRING);
+                            memset(&string_buf[0], 0, sizeof(string_buf));
                         }
-<STRING>[\n]            {
+<STRING>\"              {
+                            BEGIN(INITIAL);
+                            if(strlen(string_buf_ptr) >= MAX_STR_CONST) {
+                                cool_yylval.error_msg = "String constant too long";
+                                return ERROR;
+                            }
+                            else {
+                                cool_yylval.symbol = strTable.add_string(string_buf);
+                                return STR_CONST;
+                            }
+                        }
+<STRING>\n              {
                             // Correct path handled by the case below
                             BEGIN(INITIAL);
-                            cool_yylval.error_msg = "Newline in string requires \\";
+                            cool_yylval.error_msg = "Unterminated string constant";
+                            return ERROR;
+                        }
+<STRING><<EOF>>         {
+                            BEGIN(INITIAL);
+                            cool_yylval.error_msg = "EOF in string constant";
+                            return ERROR;
+                        }
+<STRING>\0              {
+                            BEGIN(BADSTRING);
+                            cool_yylval.error_msg = "Null character in string.";
                             return ERROR;
                         }
 <STRING>\\              {
@@ -155,16 +173,37 @@ f[Aa][Ll][Ss][Ee]       { cool_yylval.boolean = false;
                             else if(c == 'f') {
                                 string_buf[strlen(string_buf)] = '\f';
                             }
+                            else if(c == '\0') {
+                                BEGIN(BADSTRING);
+                                cool_yylval.error_msg = "String contains escaped null character.";
+                                return ERROR;
+                            }
                             else {
                                 string_buf[strlen(string_buf)] = c;
                             }
                         }
-<STRING>[^"\n\\]+       { strcat(string_buf, yytext); }
+<STRING>[^"\n\0\\]+     {
+                            strcat(string_buf, yytext);
+                        }
+
+<BADSTRING>["\n]        { BEGIN(INITIAL); }
+<BADSTRING>[^"\n]+      { }
+
+ /* Operators */
+\+                      { return '+'; }
+-                       { return '-'; }
+\.                      { return '.'; }
+\(                      { return '('; }
+\)                      { return ')'; }
 
  /* The rest */
 {TYPE_IDENTIFIER}       {
                             cool_yylval.symbol = strTable.add_string(yytext);
                             return TYPEID;
+                        }
+{OBJ_IDENTIFIER}        {
+                            cool_yylval.symbol = strTable.add_string(yytext);
+                            return OBJECTID;
                         }
 {DIGIT}+                {
                             cool_yylval.symbol = intTable.add_int(atoi(yytext));

@@ -6,6 +6,5 @@ guard :shell do
     watch(%r{(lexer|\.cl)$}) do
         system('clear')
         system('./pa1-grading.pl')
-        system('cat grading/test-output/backslash.diff')
     end
 end
