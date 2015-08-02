@@ -90,9 +90,9 @@ WHITESPACE      [ \t\f\r\v]+
  /*
   *  The multiple-character operators.
   */
-{DARROW}                { return (DARROW); }
+{DARROW}                { return DARROW; }
 (?i:ISVOID)             { return ISVOID; }
-\.                      { return "."; }
+ /*\.                      { return "."; }*/
 (?i:NOT)                { return NOT; }
 
  /*
@@ -130,41 +130,44 @@ f[Aa][Ll][Ss][Ee]       { cool_yylval.boolean = false;
   */
 \"                      { BEGIN(STRING); memset(&string_buf[0], 0, sizeof(string_buf)); }
 <STRING>\"              {
-                          strcat(string_buf, yytext);
-                          if(string_buf[strlen(string_buf)-2] == '\\') {
-                              yymore();
-                          }
-                          else {
-                              // Kill the ending "
-                              string_buf[strlen(string_buf)-1] = '\0';
-
+                              //string_buf[strlen(string_buf)-1] = '\0';
                               cool_yylval.symbol = strTable.add_string(string_buf);
                               BEGIN(INITIAL);
                               return STR_CONST;
-                          }
                         }
-<STRING>[^"\n]+         { strcat(string_buf, yytext); }
 <STRING>[\n]            {
-                        if(yytext[yyleng-2] != '\\') {
+                            // Correct path handled by the case below
+                            BEGIN(INITIAL);
                             cool_yylval.error_msg = "Newline in string requires \\";
                             return ERROR;
-                        } else {
-                            strcat(string_buf, yytext);
                         }
+<STRING>\\              {
+                            char c = yyinput();
+                            if(c == 'b') {
+                                string_buf[strlen(string_buf)] = '\b';
+                            }
+                            else if(c == 't') {
+                                string_buf[strlen(string_buf)] = '\t';
+                            }
+                            else if(c == 'n' || c == '\n') {
+                                string_buf[strlen(string_buf)] = '\n';
+                            }
+                            else if(c == 'f') {
+                                string_buf[strlen(string_buf)] = '\f';
+                            }
+                            else {
+                                string_buf[strlen(string_buf)] = c;
+                            }
                         }
- /*
-\"[^"\n]*               {
-                        if(yytext[yyleng-1] == '\\')
-                            yymore();
-                        else {
-                            cool_yylval.symbol = strTable.add_string(yytext);
-                            return STR_CONST;
-                        }
-                        }
- */
+<STRING>[^"\n\\]+       { strcat(string_buf, yytext); }
 
+ /* The rest */
+{TYPE_IDENTIFIER}       {
+                            cool_yylval.symbol = strTable.add_string(yytext);
+                            return TYPEID;
+                        }
 {DIGIT}+                {
-                        cool_yylval.symbol = intTable.add_int(atoi(yytext));
-                        return INT_CONST;
+                            cool_yylval.symbol = intTable.add_int(atoi(yytext));
+                            return INT_CONST;
                         }
 %%

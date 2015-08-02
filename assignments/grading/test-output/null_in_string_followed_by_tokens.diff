@@ -1,8 +1,0 @@
-1,3c1,2
-< LONGERROR
-< OBJECTID a
-< '+'
----
-> STR_CONST "null character is here ->"
-> a+
-\ No newline at end of file

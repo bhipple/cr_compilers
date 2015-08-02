@@ -1,10 +1,11 @@
 guard :shell do
     watch(%r{(cool\.flex)}) do
-        `make lexer`
+        system('make lexer')
     end
 
     watch(%r{(lexer|\.cl)$}) do
-        `./lexer test.cl`
-        `./lexer small-test.cl`
+        system('clear')
+        system('./pa1-grading.pl')
+        system('cat grading/test-output/backslash.diff')
     end
 end

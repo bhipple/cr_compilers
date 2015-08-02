@@ -1,6 +1,0 @@
-1,2c1
-< OBJECTID before_the_comment
-< LONGERROR
----
-> before_the_comment**
-\ No newline at end of file

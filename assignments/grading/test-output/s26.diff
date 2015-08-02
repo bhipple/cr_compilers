@@ -1,7 +1,0 @@
-1,2c1,2
-< INT_CONST 3
-< OBJECTID a
----
-> *#3 INT_CONST 3
-> a
-\ No newline at end of file

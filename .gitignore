@@ -1,3 +1,8 @@
 *.o
 *.s
 lexer
+assignments/grading/test-output/
+assignments/grading/RESULTS
+assignments/grading/SCORE
+*.out
+*.diff
