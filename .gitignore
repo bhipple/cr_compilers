@@ -1,8 +1,9 @@
+*.diff
 *.o
+*.out
 *.s
-lexer
-assignments/grading/test-output/
+*.unfilt
 assignments/grading/RESULTS
 assignments/grading/SCORE
-*.out
-*.diff
+assignments/grading/test-output/
+lexer

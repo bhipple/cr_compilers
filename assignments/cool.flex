@@ -58,8 +58,8 @@ StrTable strTable;
 
 DARROW          =>
 DIGIT           [0-9]
-TYPE_IDENTIFIER [A-Z][A-Za-z_]*
-OBJ_IDENTIFIER  [a-z][A-Za-z_]*
+TYPE_IDENTIFIER [A-Z][A-Za-z_0-9]*
+OBJ_IDENTIFIER  [a-z][A-Za-z_0-9]*
 
 ESCAPED_STR_CHARS   \\[btnf]
 
@@ -78,14 +78,32 @@ WHITESPACE      [ \t\f\r\v]+
  /*
   *  Nested comments
   */
+\*\)                    {
+                            cool_yylval.error_msg = "Unmatched *)";
+                            return ERROR;
+                        }
 \-\-                    { BEGIN(COMMENT); }
 <COMMENT>[^\n]          { /* eat it */ }
 <COMMENT>\n             { BEGIN(INITIAL); ++curr_lineno; }
 
 \(\*                    { BEGIN(BR_COMMENT); ++comment_depth; }
+<BR_COMMENT>\\\(\*      { /* escaping the \(* */ }
+<BR_COMMENT>\\\*\)      { /* escaping the \*) */}
 <BR_COMMENT>\(\*        { ++comment_depth; }
-<BR_COMMENT>\*\)        { --comment_depth; if(comment_depth == 0) { BEGIN(INITIAL); }}
-<BR_COMMENT>[^\*\)\n]   { /* eat it */ }
+<BR_COMMENT>\*\)        {
+                            --comment_depth;
+                            if(comment_depth == 0) {
+                                BEGIN(INITIAL);
+                            }
+                        }
+<BR_COMMENT><<EOF>>     {
+                            BEGIN(INITIAL);
+                            cool_yylval.error_msg = "EOF in comment";
+                            return ERROR;
+                        }
+<BR_COMMENT>\\          { /* eat it */ }
+<BR_COMMENT>[^\\\*\)\n] { /* eat it */ }
+<BR_COMMENT>\*          { }
 <BR_COMMENT>\n          { ++curr_lineno; }
 
  /*
@@ -94,6 +112,8 @@ WHITESPACE      [ \t\f\r\v]+
 {DARROW}                { return DARROW; }
 (?i:ISVOID)             { return ISVOID; }
 (?i:NOT)                { return NOT; }
+\<=                     { return LE; }
+\<-                     { return ASSIGN; }
 
  /*
   * Keywords are case-insensitive except for the values true and false,
@@ -191,10 +211,21 @@ f[Aa][Ll][Ss][Ee]       { cool_yylval.boolean = false;
 
  /* Operators */
 \+                      { return '+'; }
--                       { return '-'; }
+\-                      { return '-'; }
+\*                      { return '*'; }
 \.                      { return '.'; }
 \(                      { return '('; }
 \)                      { return ')'; }
+\{                      { return '{'; }
+\}                      { return '}'; }
+;                       { return ';'; }
+:                       { return ':'; }
+@                       { return '@'; }
+,                       { return ','; }
+\/                      { return '/'; }
+~                       { return '~'; }
+\<                      { return '<'; }
+=                       { return '='; }
 
  /* The rest */
 {TYPE_IDENTIFIER}       {
@@ -208,5 +239,11 @@ f[Aa][Ll][Ss][Ee]       { cool_yylval.boolean = false;
 {DIGIT}+                {
                             cool_yylval.symbol = intTable.add_int(atoi(yytext));
                             return INT_CONST;
+                        }
+
+ /* Characters not in the language */
+[!#$%^&_>?`\[\]\\|_]    {
+                            cool_yylval.error_msg = yytext;
+                            return ERROR;
                         }
 %%
