@@ -88,7 +88,9 @@ WHITESPACE      [ \t\f\r\v]+
 
 \(\*                    { BEGIN(BR_COMMENT); ++comment_depth; }
 <BR_COMMENT>\\\(\*      { /* escaping the \(* */ }
+<BR_COMMENT>\(\\\*      { /* escaping the (\* */ }
 <BR_COMMENT>\\\*\)      { /* escaping the \*) */}
+<BR_COMMENT>\*\\\)      { /* escaping the *\) */}
 <BR_COMMENT>\(\*        { ++comment_depth; }
 <BR_COMMENT>\*\)        {
                             --comment_depth;
