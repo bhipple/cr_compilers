@@ -43,6 +43,7 @@ extern YYSTYPE cool_yylval;
  *  Add Your own definitions here
  */
 #include <iostream>
+#include <string>
 
 int comment_depth = 0;
 
@@ -89,8 +90,8 @@ WHITESPACE      [ \t\f\r\v]+
 \(\*                    { BEGIN(BR_COMMENT); ++comment_depth; }
 <BR_COMMENT>\\\(\*      { /* escaping the \(* */ }
 <BR_COMMENT>\(\\\*      { /* escaping the (\* */ }
-<BR_COMMENT>\\\*\)      { /* escaping the \*) */}
-<BR_COMMENT>\*\\\)      { /* escaping the *\) */}
+<BR_COMMENT>\\\*\)      { /* escaping the \*) */ }
+<BR_COMMENT>\*\\\)      { /* escaping the *\) */ }
 <BR_COMMENT>\(\*        { ++comment_depth; }
 <BR_COMMENT>\*\)        {
                             --comment_depth;
@@ -104,7 +105,7 @@ WHITESPACE      [ \t\f\r\v]+
                             return ERROR;
                         }
 <BR_COMMENT>\\          { /* eat it */ }
-<BR_COMMENT>[^\\\*\)\n] { /* eat it */ }
+<BR_COMMENT>[^\\\*\n]   { /* eat it */ }
 <BR_COMMENT>\*          { }
 <BR_COMMENT>\n          { ++curr_lineno; }
 
@@ -239,12 +240,13 @@ f[Aa][Ll][Ss][Ee]       { cool_yylval.boolean = false;
                             return OBJECTID;
                         }
 {DIGIT}+                {
-                            cool_yylval.symbol = intTable.add_int(atoi(yytext));
+                            // In the Lexer, integers are held by their string representation.
+                            cool_yylval.symbol = intTable.add_string(yytext);
                             return INT_CONST;
                         }
 
- /* Characters not in the language */
-[!#$%^&_>?`\[\]\\|_]    {
+ /* Characters not covered by this point are not in the language */
+.                       {
                             cool_yylval.error_msg = yytext;
                             return ERROR;
                         }
