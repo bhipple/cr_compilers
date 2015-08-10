@@ -122,8 +122,6 @@ WHITESPACE      [ \t\f\r\v]+
   * Keywords are case-insensitive except for the values true and false,
   * which must begin with a lower-case letter.
   */
-SELF_TYPE               { }
-
 (?i:CLASS)              { return CLASS; }
 (?i:ELSE)               { return ELSE; }
 (?i:IF)                 { return IF; }
