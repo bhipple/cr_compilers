@@ -253,3 +253,44 @@ A -> Sc | d
 The Dragon Book has some algorithms for eliminating the non-obvious left recursive problem above.  This means that, in principle, there are automated ways to remove left-recursion. In practice, people do it by hand so that they can still work with their grammar.
 
 Recursive descent is often used in production compilers, including gcc.
+
+###Week 4
+#####Predictive Parsers
+LL(k) grammars that look ahead to the next few tokens and always choose the correct production rule.
+ - No backtracking!
+
+LL(k) means left-to-right with leftmost derivation and k-token lookahead.
+
+In LL(1), there is only one choice of production at each step.
+
+Because of these limitations, we have to `left factor` the grammar by removing common prefixes on production rules.
+For example, 
+```
+E -> T + E | T
+T -> int | int * T | (E)
+Becomes:
+E -> TX
+X -> + E | epsilon
+T -> intY | (E)
+Y -> *T | epsilon
+```
+We can then construct a parsing table such that the rows correspond to symbols (X, Y, E, etc), columns correspond to terminals, and the cell at [row][col] says what production rule to apply when the input has that col value and the top of the parsing stack is the element at row.
+
+#####First Sets
+How to construct LL(1) parsing tables using first sets.
+
+`First(X) = {t | X-> *tAlpha} U {epsilon | X ->* epsilon}`
+
+Algorithm:
+```
+!. First(t) = { t }, for any terminal t
+2. epsilon is in First(X) if X -> epsilon or X -> A1..AN and epsilon is in First(Ai) for i in [1,n]
+3. First(alpha) is a subset of First(X) if X -> A1..ANalpha and epsilon is in Ai for i in [1,n]
+```
+For the previous grammar, we can compute the first sets:
+ * First(E) = First(T)
+ * First(T) = { (, int }
+ * First(X) = { +, epsilon }
+ * First(Y) = { *, epsilon }
+
+
