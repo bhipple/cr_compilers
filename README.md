@@ -283,7 +283,7 @@ How to construct LL(1) parsing tables using first sets.
 
 Algorithm:
 ```
-!. First(t) = { t }, for any terminal t
+1. First(t) = { t }, for any terminal t
 2. epsilon is in First(X) if X -> epsilon or X -> A1..AN and epsilon is in First(Ai) for i in [1,n]
 3. First(alpha) is a subset of First(X) if X -> A1..ANalpha and epsilon is in Ai for i in [1,n]
 ```
@@ -293,4 +293,140 @@ For the previous grammar, we can compute the first sets:
  * First(X) = { +, epsilon }
  * First(Y) = { *, epsilon }
 
+#####Follow Sets
+t is in the follow set of X if there is some derivation such that t can appear immediately after the derivation of X
+`Follow(X) = { t | S ->* Beta X t delta}`
 
+If X -> AB, then:
+ * First(B) is a subset of Follow(A)
+ * Follow(X) is a subset of Follow(B)
+ * If B has an epsilon production, then Follow(X) is a subset of Follow(A)
+ * If S is the start symbol, then $ is in Follow(S)
+
+Note that epsilon never appears in follow sets, so a follow set is just a set of terminals
+Algorithm:
+```
+1. $ in Follow(S)
+2. First(Beta) - {epsilon} in Follow(X)
+    for each production A -> alpha X Beta
+3. Follow(A) in Follow(X)
+    for each production A -> alpha X Beta where epsilon in First(Beta)
+```
+For the previous grammer and first sets, we compute the follow sets:
+
+We can denote certain properties, such as:
+ * Follow(X) subset Follow(E)
+ * Follow(E) subset Follow(X) => Follow(X) == Follow(E)
+ * Follow(T) subset First(X)
+ * Follow(T) subset Follow(E)
+ * Follow(Y) subset Follow(T)
+ * Follow(T) subset Follow(Y) => Follow(T) == Follow(Y)
+
+And the actual sets:
+ * Follow(E) = { $, ) }
+ * Follow(X) = { $, ) }
+ * Follow(T) = { +,  $, ) }
+ * Follow(Y) = { +, $, ) }
+ * Follow('(') = { (, int }
+ * Follow(')') = { +, $, ) }
+ * Follow('+') = { (, int }
+ * Follow('*') = { (, int }
+ * Follow(int) = { *, +, $, ) }
+
+#####LL(1) Parsing Tables
+Rules: For each production A -> alpha,
+ 1. For each termianl t in First(alpha), do T[A, t] = alpha
+ 2. If epsilon in First(alpha), for each t in Follow(A) do T[A, t] = alpha
+ 3. If epsilon in First(alpha and $ in Follow(A), do T[A, $] = alpha
+
+If any entry in the parsing table is multiply defined, then the grammar G is not LL(1)
+
+The only way to prove that a grammar is LL(1) is to build the parsing table. That said, here are some quick ways to guarantee a grammar is NOT LL(1):
+ * Not left-factored, or
+ * Left recursive, or
+ * Ambiguous
+
+Most programming language CFGs are not LL(1).  LL(1) grammars are too weak.
+
+####Bottom-Up Parsing
+This is more general than (deterministic) top-down parsing, while being just as efficient.  This is the preferrred method for most parser generator tools.
+
+Don't need left-factored grammars.
+
+Bottom up parsing reduces a string to the start symbol by inverting productions.
+
+**A bottom-up parser traces a rightmost derivation in reverse** by using reductions instead of productions.
+
+#####Shift-Reduce Parsing
+This is the primary strategy used by all bottom up parsers.
+
+Two move types:
+ * Shift move reads one token of input
+ * Reduce move applies an inverse production at the right end of the left string
+
+The left string is implemented by a stack, since we only do reduce operations immediately to the left of the |. Shift operations simply push a new character onto the stack.
+
+**In shift-reduce parsing, handles appear only at the top of the stack, never inside**
+
+**For any grammar, the set of viable prefixes is a regular language.**
+
+Algorithm for recognizing viable prefixes of a grammar G:
+1. Add a dummy production S' -> S to G
+2. The NFA states are the items of G, including the extra production
+  * The input to the NFA is the stack, and it will say yes if the stack is a valid prefix and no otherwise
+3. For item E -> alpha . X Beta, with X either a terminal or non-terminal, add transition:
+  * E -> alpha . X beta ->X E -> alpha X . beta, for input X
+  * Add this kind of move for every move in the grammar
+4. For item E -> alpha . X Beta and production X -> Gamma, with X a non-terminal, add transition:
+  * E -> alpha . X Beta ->e X -> . Gamma
+5. Every state in this automaton is an accepting state.
+6. Start state is S' -> .S
+
+#####SLR Parsing
+LR(0) parsing: assume that:
+  * the stack contains alpha
+  * next input is t
+  * DFA on input alpha terminates in state s
+
+Then we need to reduce X -> B if:
+  * s contains item X -> B.
+
+And we need to shift if:
+  * s contains item X -> B.tw
+  * equivalent to saying s has a transition labeled t
+
+SLR Parsing Algorithm:
+1. Let M be a DFA for viable prefixes of G
+2. Let |x1...xn$ be initial configuration
+3. Repeat until configuration is S|$
+  * Let alpha|w be current configuration
+  * Run M on current stack alpha
+  * If M accepts alpha with items i, let a be next input
+    * Shift if X -> B . a y epsilon i
+    * Reduce if X -> B . epsilon i and a in Follow(X)
+    * Report parsing error if neither applies
+
+######SLR Improvements
+To avoid repeating work, we will remember the state of the automaton on each prefix of the stack, so the stack comtains `<symbol, dfa state>` pairs.  The state is the result of running the DFA on all the symbols to the left of it.  To get started, we store `<dummy, start>` on the bottom of the stack.
+
+Define a table `goto[i, A] = j if state_i ->A state_j`
+
+Modify the shift x operation to push `<a, x>` on the stack, where `a` is the current input and `x` is a DFA state
+
+The reduce X -> alpha operation stays the same as before.
+
+Complete SLR algorithm:
+```
+Let I = w$ be initial input
+Let j = 0
+Let DFA state 1 have item S' -> .S
+Let stack = <dummy, 1>
+repeat
+  case action[top_state(stack), I[j]] of
+        shift k: push <I[j++], k>
+        reduce X -> A:
+            pop |A| pairs,
+            push <X, goto[top_state(stack), X]>
+        accept: halt normally
+        error: halt and report error
+```
