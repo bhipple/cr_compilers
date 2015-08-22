@@ -264,7 +264,7 @@ LL(k) means left-to-right with leftmost derivation and k-token lookahead.
 In LL(1), there is only one choice of production at each step.
 
 Because of these limitations, we have to `left factor` the grammar by removing common prefixes on production rules.
-For example, 
+For example,
 ```
 E -> T + E | T
 T -> int | int * T | (E)
@@ -430,3 +430,66 @@ repeat
         accept: halt normally
         error: halt and report error
 ```
+
+###Week 5
+####Semantic Analysis
+This is the last "Front end" phase, and catches all remaining developer errors
+
+Some language constructs are not context-free and therefore cannot be caught in the parsing phase, which is why we need semantic analysis.
+
+Typical semantic analysis checks:
+  * All identifiers are declared (with scope restrictions)
+  * Type checking
+  * Inheritance relationships
+  * Classes defined only once
+  * Methods in a class defined only once
+  * Reserved identifiers are not misused
+
+####Scope
+Need to match identifier declarations with uses
+
+Static scoping: scope depends only on the program text, NOT run-time behavior. The only real example of a dynamically scoped language is Lisp, though these days Lisp has change to mostly static scoping.
+
+```
+let x: Int <- 0 in
+{
+    x;  // Refers to 0
+    let x: Int <- 1 in
+        x;  // Refers to 1
+    x; // Refers to 0
+}
+```
+The above demonstrates the "most closely nested" rule.
+
+Identifier bindings:
+* Class declarations
+* Method definitions
+* Let expressions
+* Formal parameters
+* Attribute definitions
+* Case expressions
+
+Exception to the most closely nested rule: class definitions cannot be nested and are globally visible throughout the program. In particular, a class name can be used before it's even defined!
+
+####Symbol Tables
+Symbol tables are a stack that pushes variable definitions onto the stack upon entering a scope, and pops them off upon leaving it.
+
+We implement methods like:
+* enter_scope()
+* find_symbol(x)
+* add_symbol(x)
+* check_scope(x)
+* exit_scope()
+
+####Type Checking and Type Environments
+We create a number of inference rules and use them to prove things about the types of objects
+
+Types are computed in a bottom-up pass (leaves first) over the AST.  Once we have the types of the children of a node, we can use inference rules to compute the type of a node.
+
+A type environment gives types for free variables.
+* A type environment is a function from ObjectIdentifiers to Types.
+* A variable is free in an expression if it is not defined within the expression.
+
+Let `O` be a function from ObjectIdentifiers to Types.  Then the sentence `O |- e:T` is read: Under the assumption that free variables have the types given by `O`, it is provable that the expression `e` has the type `T`.
+
+Type environments are implemented using the compiler's symbol table.
